@@ -28,7 +28,7 @@ public class Player extends Entity{
 
         x = 100;
         y = 100;
-        speed = 4;
+        speed = 3;
         direction = "down";
     }
     @SuppressWarnings("CallToPrintStackTrace")
@@ -57,33 +57,81 @@ public class Player extends Entity{
         }
     }
     public void update(){
-        if(keyH.upPressed == true){
-            y -= speed;
-            direction = "up";
+        if(keyH.upPressed == true || keyH.downPressed == true ||
+                keyH.leftPressed == true || keyH.rightPressed == true){
+
+            if(keyH.upPressed == true){
+                y -= speed;
+                direction = "up";
+            }
+
+            else if(keyH.downPressed == true){
+                y += speed;
+                direction = "down";
+            }
+
+            else if(keyH.leftPressed == true){
+                x -= speed;
+                direction = "left";
+            }
+
+            if(keyH.rightPressed == true){
+                x+= speed;
+                direction = "right";
+            }
+
+            spriteCounter++;
+            if(spriteCounter > 16) {
+                if (spriteNum == 1) {
+
+                    spriteNum = 2;
+                }
+                else if(spriteNum == 2){
+                    spriteNum = 3;
+                }
+                else if(spriteNum == 3){
+                    spriteNum = 1;
+                }
+                spriteCounter = 0;
+            }
         }
 
-        else if(keyH.downPressed == true){
-            y += speed;
-            direction = "down";
-        }
-
-        else if(keyH.leftPressed == true){
-            x -= speed;
-            direction = "left";
-        }
-
-        if(keyH.rightPressed == true){
-            x+= speed;
-            direction = "right";
-        }
     }
     public void draw(Graphics2D g2){
         BufferedImage image = null;
         switch(direction) {
-            case "up" -> image = up1;
-            case "down" -> image = down1;
-            case "left" -> image = left1;
-            case "right" -> image = right1;
+            case "up" -> {
+                if(spriteNum == 1){
+                    image = up1;}
+                if(spriteNum == 2){
+                    image = up2;}
+                if(spriteNum == 3){
+                    image = up3;}
+            }
+            case "down" ->{
+                if(spriteNum == 1){
+                    image = down1;}
+                if(spriteNum == 2){
+                    image = down2;}
+                if(spriteNum == 3){
+                    image = down3;}
+            }
+            case "left" -> {
+                if(spriteNum == 1){
+                    image = left1;}
+                if(spriteNum == 2){
+                    image = left2;}
+                if(spriteNum == 3){
+                    image = left3;}
+            }
+            case "right" -> {
+                if(spriteNum == 1){
+                    image = right1;}
+                if(spriteNum == 2){
+                    image = right2;}
+                if(spriteNum == 3){
+                    image = right3;}
+            }
         }
         g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
 
