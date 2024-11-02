@@ -21,6 +21,7 @@ public class TileManager {
         mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
 
         getTileImage();
+
         loadMap();
 
     }
@@ -42,10 +43,10 @@ public class TileManager {
 
     public void loadMap(){
         try {
-            InputStream is = getClass().getResourceAsStream("/maps/map01.txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        InputStream is = getClass().getResourceAsStream("/maps/map1.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-            int col = 0;
+            int col = 0;  
             int row = 0;
 
             while (col < gp.maxScreenCol && row < gp.maxScreenRow){
@@ -66,6 +67,7 @@ public class TileManager {
             }
             br.close();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     public void draw(Graphics2D g2){
