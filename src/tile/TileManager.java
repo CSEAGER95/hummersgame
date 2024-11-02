@@ -40,7 +40,6 @@ public class TileManager {
         }
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public void loadMap(){
         try {
             InputStream is = getClass().getResourceAsStream("/maps/map01.txt");
@@ -53,7 +52,7 @@ public class TileManager {
                 String line = br.readLine();
 
                 while(col < gp.maxScreenCol){
-                    String numbers[] = line.split("");
+                    String numbers[] = line.split(" ");
 
                     int num = Integer.parseInt(numbers[col]);
 
