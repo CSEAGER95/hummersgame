@@ -12,11 +12,16 @@ public class Player extends Entity{
     GamePanel gp;
     KeyHandler keyH;
 
-    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public final int screenx;
+    public final int screeny;
+
     public Player(GamePanel gp, KeyHandler keyH) throws IOException {
 
         this.gp = gp;
         this.keyH = keyH;
+
+        screenx = gp.screenWidth/2 - (gp.tileSize /2);
+        screeny = gp.screenHeight/2 - (gp.tileSize /2);
 
         getPlayerImage();
         setDefaultValues();
@@ -26,8 +31,8 @@ public class Player extends Entity{
 
     public void setDefaultValues(){
 
-        x = 100;
-        y = 100;
+        worldx = gp.tileSize * 23;
+        worldy = gp.tileSize * 21;
         speed = 3;
         direction = "down";
     }
@@ -61,22 +66,22 @@ public class Player extends Entity{
                 keyH.leftPressed == true || keyH.rightPressed == true){
 
             if(keyH.upPressed == true){
-                y -= speed;
+                worldy -= speed;
                 direction = "up";
             }
 
             else if(keyH.downPressed == true){
-                y += speed;
+                worldy += speed;
                 direction = "down";
             }
 
             else if(keyH.leftPressed == true){
-                x -= speed;
+                worldx -= speed;
                 direction = "left";
             }
 
             if(keyH.rightPressed == true){
-                x+= speed;
+                worldx+= speed;
                 direction = "right";
             }
 
@@ -133,7 +138,7 @@ public class Player extends Entity{
                     image = right3;}
             }
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenx, screeny, gp.tileSize, gp.tileSize, null);
 
     }
 }
