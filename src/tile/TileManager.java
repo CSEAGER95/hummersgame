@@ -11,7 +11,7 @@ import main.GamePanel;
 public class TileManager {
     GamePanel gp;
     Tile[] tile;
-    int mapTileNum[][];
+    public int mapTileNum[][];
     
     public TileManager(GamePanel gp){
         this.gp = gp;
@@ -47,30 +47,39 @@ public class TileManager {
             tile[7].image = ImageIO.read(getClass().getResourceAsStream("/tile/tallgrass.png"));
             tile[8] = new Tile();
             tile[8].image = ImageIO.read(getClass().getResourceAsStream("/tile/treebottom.png"));
+            tile[8].collision = true;
             tile[9] = new Tile();
             tile[9].image = ImageIO.read(getClass().getResourceAsStream("/tile/treetop.png"));
+            tile[9].collision = true;
             tile[10] = new Tile();
             tile[10].image = ImageIO.read(getClass().getResourceAsStream("/tile/wall.png"));
+            tile[10].collision = true;
             tile[11] = new Tile();
             tile[11].image = ImageIO.read(getClass().getResourceAsStream("/tile/carpet.png"));
             tile[12] = new Tile();
             tile[12].image = ImageIO.read(getClass().getResourceAsStream("/tile/couch.png"));
             tile[13] = new Tile();
             tile[13].image = ImageIO.read(getClass().getResourceAsStream("/tile/fridge.png"));
+            tile[13].collision = true;
             tile[14] = new Tile();
             tile[14].image = ImageIO.read(getClass().getResourceAsStream("/tile/pilon.png"));
+            tile[14].collision = true;
             tile[15] = new Tile();
             tile[15].image = ImageIO.read(getClass().getResourceAsStream("/tile/radio.png"));
+            tile[15].collision = true;
             tile[16] = new Tile();
             tile[16].image = ImageIO.read(getClass().getResourceAsStream("/tile/rug.png"));
             tile[17] = new Tile();
             tile[17].image = ImageIO.read(getClass().getResourceAsStream("/tile/sink.png"));
+            tile[17].collision = true;
             tile[18] = new Tile();
             tile[18].image = ImageIO.read(getClass().getResourceAsStream("/tile/stool.png"));
             tile[19] = new Tile();
             tile[19].image = ImageIO.read(getClass().getResourceAsStream("/tile/stove.png"));
+            tile[19].collision = true;
             tile[20] = new Tile();
             tile[20].image = ImageIO.read(getClass().getResourceAsStream("/tile/table.png"));
+            tile[20].collision = true;
             tile[21] = new Tile();
             tile[21].image = ImageIO.read(getClass().getResourceAsStream("/tile/gravel.png"));
             
