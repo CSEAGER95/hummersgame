@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
@@ -15,6 +16,7 @@ public class Player extends Entity{
 
     public final int screenx;
     public final int screeny;
+    public ArrayList<Item> inventory = new ArrayList<>();
 
     public Player(GamePanel gp, KeyHandler keyH) throws IOException {
 
@@ -147,4 +149,179 @@ public class Player extends Entity{
         g2.drawImage(image, screenx, screeny, gp.tileSize, gp.tileSize, null);
 
     }
+
+    public void useHoe() {
+    // Get the tile in front of the player based on direction
+    int tileX = 0;
+    int tileY = 0;
+    
+    switch(direction) {
+        case "up":
+            tileX = worldx / gp.tileSize;
+            tileY = (worldy - gp.tileSize) / gp.tileSize;
+            break;
+        case "down":
+            tileX = worldx / gp.tileSize;
+            tileY = (worldy + gp.tileSize) / gp.tileSize;
+            break;
+        case "left":
+            tileX = (worldx - gp.tileSize) / gp.tileSize;
+            tileY = worldy / gp.tileSize;
+            break;
+        case "right":
+            tileX = (worldx + gp.tileSize) / gp.tileSize;
+            tileY = worldy / gp.tileSize;
+            break;
+    }
+    
+    // Check if there's a farm plot at this position
+    for(int i = 0; i < gp.farmPlots.length; i++) {
+        if(gp.farmPlots[i] != null) {
+            if(gp.farmPlots[i].worldx / gp.tileSize == tileX && gp.farmPlots[i].worldy / gp.tileSize == tileY) {
+                // Till the soil
+                gp.farmPlots[i].till();
+                break;
+            }
+        }
+    }
+}
+
+public void useWateringCan() {
+    // Get the tile in front of the player based on direction
+    int tileX = 0;
+    int tileY = 0;
+    
+    switch(direction) {
+        case "up":
+            tileX = worldx / gp.tileSize;
+            tileY = (worldy - gp.tileSize) / gp.tileSize;
+            break;
+        case "down":
+            tileX = worldx / gp.tileSize;
+            tileY = (worldy + gp.tileSize) / gp.tileSize;
+            break;
+        case "left":
+            tileX = (worldx - gp.tileSize) / gp.tileSize;
+            tileY = worldy / gp.tileSize;
+            break;
+        case "right":
+            tileX = (worldx + gp.tileSize) / gp.tileSize;
+            tileY = worldy / gp.tileSize;
+            break;
+    }
+    
+    // Check if there's a farm plot at this position
+    for(int i = 0; i < gp.farmPlots.length; i++) {
+        if(gp.farmPlots[i] != null) {
+            if(gp.farmPlots[i].worldx / gp.tileSize == tileX && gp.farmPlots[i].worldy / gp.tileSize == tileY) {
+                // Water the soil
+                gp.farmPlots[i].water();
+                break;
+            }
+        }
+    }
+}
+
+public void plantSeed(Item seed) {
+    // Get the tile in front of the player based on direction
+    int tileX = 0;
+    int tileY = 0;
+    
+    switch(direction) {
+        case "up":
+            tileX = worldx / gp.tileSize;
+            tileY = (worldy - gp.tileSize) / gp.tileSize;
+            break;
+        case "down":
+            tileX = worldx / gp.tileSize;
+            tileY = (worldy + gp.tileSize) / gp.tileSize;
+            break;
+        case "left":
+            tileX = (worldx - gp.tileSize) / gp.tileSize;
+            tileY = worldy / gp.tileSize;
+            break;
+        case "right":
+            tileX = (worldx + gp.tileSize) / gp.tileSize;
+            tileY = worldy / gp.tileSize;
+            break;
+    }
+    
+    // Check if there's a farm plot at this position
+    for(int i = 0; i < gp.farmPlots.length; i++) {
+        if(gp.farmPlots[i] != null) {
+            if(gp.farmPlots[i].worldx / gp.tileSize == tileX && gp.farmPlots[i].worldy / gp.tileSize == tileY) {
+                // Plant the seed
+                gp.farmPlots[i].plant(seed);
+                break;
+            }
+        }
+    }
+}
+
+public void harvestCrop() {
+    // Get the tile in front of the player based on direction
+    int tileX = 0;
+    int tileY = 0;
+    
+    switch(direction) {
+        case "up":
+            tileX = worldx / gp.tileSize;
+            tileY = (worldy - gp.tileSize) / gp.tileSize;
+            break;
+        case "down":
+            tileX = worldx / gp.tileSize;
+            tileY = (worldy + gp.tileSize) / gp.tileSize;
+            break;
+        case "left":
+            tileX = (worldx - gp.tileSize) / gp.tileSize;
+            tileY = worldy / gp.tileSize;
+            break;
+        case "right":
+            tileX = (worldx + gp.tileSize) / gp.tileSize;
+            tileY = worldy / gp.tileSize;
+            break;
+    }
+    
+    // Check if there's a farm plot at this position
+    for(int i = 0; i < gp.farmPlots.length; i++) {
+        if(gp.farmPlots[i] != null) {
+            if(gp.farmPlots[i].worldx / gp.tileSize == tileX && gp.farmPlots[i].worldy / gp.tileSize == tileY) {
+                // Harvest the crop
+                Item harvestedCrop = gp.farmPlots[i].harvest();
+                
+                // Add to inventory if we got something
+                if(harvestedCrop != null) {
+                    inventory.add(harvestedCrop);
+                }
+                break;
+            }
+        }
+    }
+}
+
+public void attack() {
+    // Simple placeholder for attack function
+    System.out.println("Player attacks!");
+    
+    // Check for monsters in attack range
+    int attackRange = gp.tileSize; // 1 tile attack range
+    
+    for(int i = 0; i < gp.monsters.length; i++) {
+        if(gp.monsters[i] != null && gp.monsters[i].alive) {
+            // Calculate distance to monster
+            int monsterX = gp.monsters[i].worldx;
+            int monsterY = gp.monsters[i].worldy;
+            
+            int diffX = Math.abs(worldx - monsterX);
+            int diffY = Math.abs(worldy - monsterY);
+            
+            // If monster is within attack range
+            if(diffX < attackRange && diffY < attackRange) {
+                // Apply damage (this is simplified)
+                System.out.println("Hit monster: " + gp.monsters[i].name);
+                // In a more complete implementation, you'd call a method to damage the monster
+            }
+        }
+    }
+}
 }
