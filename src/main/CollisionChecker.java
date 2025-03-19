@@ -10,103 +10,107 @@ public class CollisionChecker {
         this.gp = gp;
     }
 
-    public void checkTile(Entity entity){
-        int entityLeftWorldX = entity.worldx + entity.solidArea.x;
-        int entityRightWorldX = entity.worldx + entity.solidArea.x + entity.solidArea.width;
-        int entityTopWorldY = entity.worldy + entity.solidArea.y;
-        int entityBottomWorldY = entity.worldy + entity.solidArea.y + entity.solidArea.height;
+public void checkTile(Entity entity) {
+    // Calculate entity's position
+    int entityLeftWorldX = entity.worldx + entity.solidArea.x;
+    int entityRightWorldX = entity.worldx + entity.solidArea.x + entity.solidArea.width;
+    int entityTopWorldY = entity.worldy + entity.solidArea.y;
+    int entityBottomWorldY = entity.worldy + entity.solidArea.y + entity.solidArea.height;
 
-        int entityLeftCol = entityLeftWorldX / gp.tileSize;
-        int entityRightCol = entityRightWorldX / gp.tileSize;
-        int entityTopRow = entityTopWorldY / gp.tileSize;
-        int entityBottomRow = entityBottomWorldY / gp.tileSize;
+    // Calculate column and row of the entity in the tile map
+    int entityLeftCol = entityLeftWorldX / gp.tileSize;
+    int entityRightCol = entityRightWorldX / gp.tileSize;
+    int entityTopRow = entityTopWorldY / gp.tileSize;
+    int entityBottomRow = entityBottomWorldY / gp.tileSize;
 
-        // Add boundary checks
-        if(entityLeftCol < 0) entityLeftCol = 0;
-        if(entityRightCol >= gp.maxWorldCol) entityRightCol = gp.maxWorldCol - 1;
-        if(entityTopRow < 0) entityTopRow = 0;
-        if(entityBottomRow >= gp.maxWorldRow) entityBottomRow = gp.maxWorldRow - 1;
+    // Variables to store the tile numbers
+    int tileNum1 = 0, tileNum2 = 0;
+    
+    // The modified positions based on direction
+    int entityNextRow = 0, entityNextCol = 0;
 
-        int tileNum1, tileNum2;
-
-        switch(entity.direction) {
-            case "up":
-                entityTopRow = (entityTopWorldY - entity.speed) / gp.tileSize;
-                // Boundary check
-                if(entityTopRow < 0) entityTopRow = 0;
+    switch(entity.direction) {
+        case "up":
+            // When moving up, check if the next position will hit a wall
+            entityNextRow = (entityTopWorldY - entity.speed) / gp.tileSize;
+            
+            // Check if the calculated position is valid
+            if(entityNextRow >= 0 && entityLeftCol >= 0 && entityRightCol < gp.maxWorldCol) {
+                // Check left and right top corners
+                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityNextRow];
+                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityNextRow];
                 
-                // Access tiles safely
-                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-                
-                // Ensure tile indices are valid
+                // Check if either tile has collision
                 if(tileNum1 < gp.tileM.tile.length && tileNum2 < gp.tileM.tile.length &&
-                   tileNum1 >= 0 && tileNum2 >= 0 &&
                    gp.tileM.tile[tileNum1] != null && gp.tileM.tile[tileNum2] != null) {
                     if(gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                         entity.collisionOn = true;
                     }
                 }
-                break;
+            } else {
+                // Outside map boundary, set collision
+                entity.collisionOn = true;
+            }
+            break;
+            
+        case "down":
+            // When moving down, check if the next position will hit a wall
+            entityNextRow = (entityBottomWorldY + entity.speed) / gp.tileSize;
+            
+            if(entityNextRow < gp.maxWorldRow && entityLeftCol >= 0 && entityRightCol < gp.maxWorldCol) {
+                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityNextRow];
+                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityNextRow];
                 
-            case "down":
-                entityBottomRow = (entityBottomWorldY + entity.speed) / gp.tileSize;
-                // Boundary check
-                if(entityBottomRow >= gp.maxWorldRow) entityBottomRow = gp.maxWorldRow - 1;
-                
-                // Access tiles safely
-                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
-                
-                // Ensure tile indices are valid
                 if(tileNum1 < gp.tileM.tile.length && tileNum2 < gp.tileM.tile.length &&
-                   tileNum1 >= 0 && tileNum2 >= 0 &&
                    gp.tileM.tile[tileNum1] != null && gp.tileM.tile[tileNum2] != null) {
                     if(gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                         entity.collisionOn = true;
                     }
                 }
-                break;
+            } else {
+                entity.collisionOn = true;
+            }
+            break;
+            
+        case "left":
+            // When moving left, check if the next position will hit a wall
+            entityNextCol = (entityLeftWorldX - entity.speed) / gp.tileSize;
+            
+            if(entityNextCol >= 0 && entityTopRow >= 0 && entityBottomRow < gp.maxWorldRow) {
+                tileNum1 = gp.tileM.mapTileNum[entityNextCol][entityTopRow];
+                tileNum2 = gp.tileM.mapTileNum[entityNextCol][entityBottomRow];
                 
-            case "left":
-                entityLeftCol = (entityLeftWorldX - entity.speed) / gp.tileSize;
-                // Boundary check
-                if(entityLeftCol < 0) entityLeftCol = 0;
-                
-                // Access tiles safely
-                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
-                
-                // Ensure tile indices are valid
                 if(tileNum1 < gp.tileM.tile.length && tileNum2 < gp.tileM.tile.length &&
-                   tileNum1 >= 0 && tileNum2 >= 0 &&
                    gp.tileM.tile[tileNum1] != null && gp.tileM.tile[tileNum2] != null) {
                     if(gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                         entity.collisionOn = true;
                     }
                 }
-                break;
+            } else {
+                entity.collisionOn = true;
+            }
+            break;
+            
+        case "right":
+            // When moving right, check if the next position will hit a wall
+            entityNextCol = (entityRightWorldX + entity.speed) / gp.tileSize;
+            
+            if(entityNextCol < gp.maxWorldCol && entityTopRow >= 0 && entityBottomRow < gp.maxWorldRow) {
+                tileNum1 = gp.tileM.mapTileNum[entityNextCol][entityTopRow];
+                tileNum2 = gp.tileM.mapTileNum[entityNextCol][entityBottomRow];
                 
-            case "right":
-                entityRightCol = (entityRightWorldX + entity.speed) / gp.tileSize;
-                // Boundary check
-                if(entityRightCol >= gp.maxWorldCol) entityRightCol = gp.maxWorldCol - 1;
-                
-                // Access tiles safely
-                tileNum1 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
-                
-                // Ensure tile indices are valid
                 if(tileNum1 < gp.tileM.tile.length && tileNum2 < gp.tileM.tile.length &&
-                   tileNum1 >= 0 && tileNum2 >= 0 &&
                    gp.tileM.tile[tileNum1] != null && gp.tileM.tile[tileNum2] != null) {
                     if(gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                         entity.collisionOn = true;
                     }
                 }
-                break;
-        }
+            } else {
+                entity.collisionOn = true;
+            }
+            break;
     }
+}
     
     // Check entity collision with another entity (NPCs, monsters, etc.)
     public int checkEntity(Entity entity, Entity[] targets) {
