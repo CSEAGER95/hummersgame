@@ -1,5 +1,6 @@
 package main;
 
+import entity.NPC;
 import entity.Player;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,12 +34,55 @@ public class GamePanel extends JPanel implements Runnable{
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
 
+    public NPC[] npcs;
+
     public GamePanel() throws IOException {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        setupNPCs();
+    }
+
+    public void setupNPCs() {
+        npcs = new NPC[5];
+        
+        npcs[0] = new NPC(this);
+        npcs[0].worldx = tileSize * 23;
+        npcs[0].worldy = tileSize * 10;
+        npcs[0].getNPCImage("merchant");
+        npcs[0].name = "Merchant";
+        npcs[0].setDialogue(new String[] {
+            "Welcome to my shop!",
+            "Feel free to browse around.",
+            "We have the finest goods in the village."
+        });
+        
+        // Seed Vendor
+        npcs[1] = new NPC(this);
+        npcs[1].worldx = tileSize * 30;
+        npcs[1].worldy = tileSize * 15;
+        npcs[1].getNPCImage("seedvendor");
+        npcs[1].name = "Seed Vendor";
+        npcs[1].setMovementType(1); // Random movement
+        npcs[1].setDialogue(new String[] {
+            "Fresh seeds for sale!",
+            "These will grow into beautiful plants.",
+            "Perfect for your garden."
+        });
+        
+        // Regular Villager
+        npcs[2] = new NPC(this);
+        npcs[2].worldx = tileSize * 25;
+        npcs[2].worldy = tileSize * 21;
+        npcs[2].getNPCImage("villager");
+        npcs[2].name = "Villager";
+        npcs[2].setDialogue(new String[] {
+            "Hello there!",
+            "What a lovely day in our village.",
+            "Hope you're enjoying your stay."
+        });
     }
 
     public void startGameThread(){
@@ -75,6 +119,11 @@ public class GamePanel extends JPanel implements Runnable{
     }
     public void update(){
         player.update();
+        for(int i = 0; i < npcs.length; i++) {
+            if(npcs[i] != null) {
+                npcs[i].update();
+            }
+        }
     }
     @SuppressWarnings("override")
     public void paintComponent(Graphics g){
@@ -84,6 +133,12 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D)g;
 
         tileM.draw(g2);
+
+        for(int i = 0; i < npcs.length; i++) {
+            if(npcs[i] != null) {
+                npcs[i].draw(g2);
+            }
+        }
 
         player.draw(g2);
 

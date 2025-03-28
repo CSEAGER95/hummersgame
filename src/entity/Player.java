@@ -64,50 +64,59 @@ public class Player extends Entity{
             e.printStackTrace();
         }
     }
-    public void update(){
-        if(keyH.upPressed == true || keyH.downPressed == true ||
-                keyH.leftPressed == true || keyH.rightPressed == true){
-
-            if(keyH.upPressed == true){
-                worldy -= speed;
+    public void update() {
+        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+            if(keyH.upPressed) {
                 direction = "up";
             }
-
-            else if(keyH.downPressed == true){
-                worldy += speed;
+            else if(keyH.downPressed) {
                 direction = "down";
             }
-
-            else if(keyH.leftPressed == true){
-                worldx -= speed;
+            else if(keyH.leftPressed) {
                 direction = "left";
             }
-
-            if(keyH.rightPressed == true){
-                worldx+= speed;
+            else if(keyH.rightPressed) {
                 direction = "right";
             }
-
+            
+            // Check tile collision
             collisionOn = false;
             gp.cChecker.checkTile(this);
-
+            
+            // If collision is false, player can move
+            if(!collisionOn) {
+                switch(direction) {
+                    case "up":
+                        worldy -= speed;
+                        break;
+                    case "down":
+                        worldy += speed;
+                        break;
+                    case "left":
+                        worldx -= speed;
+                        break;
+                    case "right":
+                        worldx += speed;
+                        break;
+                }
+            }
+    
             spriteCounter++;
             if(spriteCounter > 16) {
-                if (spriteNum == 1) {
-
+                if(spriteNum == 1) {
                     spriteNum = 2;
                 }
-                else if(spriteNum == 2){
+                else if(spriteNum == 2) {
                     spriteNum = 3;
                 }
-                else if(spriteNum == 3){
+                else if(spriteNum == 3) {
                     spriteNum = 1;
                 }
                 spriteCounter = 0;
             }
         }
-
     }
+    
     public void draw(Graphics2D g2){
         BufferedImage image = null;
         switch(direction) {
